@@ -1,0 +1,95 @@
+class Bus:
+    def __init__(self, bus_id, capacity):
+        self.bus_id = bus_id
+        self.capacity = capacity
+        self.seats = [False] * capacity
+
+    def reserve_seat(self, seat_number):
+        if seat_number < 1 or seat_number > self.capacity:
+            print("Invalid seat number.")
+            return False
+        if self.seats[seat_number - 1]:
+            print("Seat already reserved.")
+            return False
+        self.seats[seat_number - 1] = True
+        print(f"Seat {seat_number} reserved successfully.")
+        return True
+
+    def cancel_reservation(self, seat_number):
+        if seat_number < 1 or seat_number > self.capacity:
+            print("Invalid seat number.")
+            return False
+        if not self.seats[seat_number - 1]:
+            print("Seat is not reserved.")
+            return False
+        self.seats[seat_number - 1] = False
+        print(f"Reservation for seat {seat_number} canceled successfully.")
+        return True
+
+    def display_available_seats(self):
+        print("Available Seats:")
+        for i, seat in enumerate(self.seats):
+            if not seat:
+                print(f"Seat {i + 1} is available.")
+
+    def display_reserved_seats(self):
+        print("Reserved Seats:")
+        for i, seat in enumerate(self.seats):
+            if seat:
+                print(f"Seat {i + 1} is reserved.")
+
+
+class BusReservationSystem:
+    def __init__(self):
+        self.buses = []
+
+    def add_bus(self, bus_id, capacity):
+        bus = Bus(bus_id, capacity)
+        self.buses.append(bus)
+        print(f"Bus {bus_id} with capacity {capacity} added successfully.")
+
+    def reserve_seat(self, bus_id, seat_number):
+        for bus in self.buses:
+            if bus.bus_id == bus_id:
+                return bus.reserve_seat(seat_number)
+        print(f"Bus {bus_id} not found.")
+        return False
+
+    def cancel_reservation(self, bus_id, seat_number):
+        for bus in self.buses:
+            if bus.bus_id == bus_id:
+                return bus.cancel_reservation(seat_number)
+        print(f"Bus {bus_id} not found.")
+        return False
+
+    def display_available_seats(self, bus_id):
+        for bus in self.buses:
+            if bus.bus_id == bus_id:
+                return bus.display_available_seats()
+        print(f"Bus {bus_id} not found.")
+
+    def display_reserved_seats(self, bus_id):
+        for bus in self.buses:
+            if bus.bus_id == bus_id:
+                return bus.display_reserved_seats()
+        print(f"Bus {bus_id} not found.")
+
+
+# Example usage:
+
+bus_system = BusReservationSystem()
+
+# Add buses
+bus_system.add_bus("B001", 20)
+bus_system.add_bus("B002", 30)
+
+# Reserve seats
+bus_system.reserve_seat("B001", 5)
+bus_system.reserve_seat("B001", 15)
+
+# Cancel reservation
+bus_system.cancel_reservation("B001", 5)
+
+# Display available and reserved seats
+bus_system.display_available_seats("B001")
+bus_system.display_reserved_seats("B001")
